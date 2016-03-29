@@ -65,6 +65,8 @@ def get_regular_voseo(infinitive,ending='',mood='indicative'):
         return get_stem(infinitive)[:-1]+"qués"
     if stripreflexives(infinitive)[len(stripreflexives(infinitive))-3:] == 'gar' and mood == 'subjunctive':
         return get_stem(infinitive)[:-1]+"gués"
+    if stripreflexives(infinitive)[len(stripreflexives(infinitive))-3:] == 'zar' and mood == 'subjunctive':
+        return get_stem(infinitive)[:-1]+"cés"
     if ending == 'ar':
         if mood == 'indicative':
             return get_stem(infinitive)+"ás"
