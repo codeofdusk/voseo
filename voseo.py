@@ -127,7 +127,7 @@ def generate_vostext(infinitive,vosform=None,ending=None,mood='indicative',heade
         ending=get_ending(infinitive)
     text=''
     if header:
-        text += "----\n==Spanish==\n\n===Verb===\n{{es-verb-form}}\n"
+        text += "==Spanish==\n\n===Verb===\n{{es-verb-form}}\n"
     text += "# {{es-verb form of|ending=" + ending + "|mood=" + mood
     if mood == 'imperative':
         text+='|sense=affirmative'
