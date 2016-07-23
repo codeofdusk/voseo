@@ -27,6 +27,7 @@ rlgen = pagegenerators.CategorizedPageGenerator(pywikibot.Category(en,'Category:
 rlargen = pagegenerators.CategorizedPageGenerator(pywikibot.Category(en,'Category:Spanish verbs having voseo red links in their conjugation table (regular -ar verbs)'))
 rlcargen = pagegenerators.CategorizedPageGenerator(pywikibot.Category(en,'Category:Spanish verbs having voseo red links in their conjugation table (-car)'))
 rlgargen = pagegenerators.CategorizedPageGenerator(pywikibot.Category(en,'Category:Spanish verbs having voseo red links in their conjugation table (-gar)'))
+badgen = pagegenerators.CategorizedPageGenerator(pywikibot.Category(en,'Category:Spanish terms with red links in their inflection tables'))
 argen = pagegenerators.CategorizedPageGenerator(pywikibot.Category(en,'Category:Spanish verbs ending in -ar'))
 ergen = pagegenerators.CategorizedPageGenerator(pywikibot.Category(en,'Category:Spanish verbs ending in -er'))
 irgen = pagegenerators.CategorizedPageGenerator(pywikibot.Category(en,'Category:Spanish verbs ending in -ir'))
@@ -216,7 +217,7 @@ def get_holes():
     global talkstop
     if talkstop:
         talkrev=pywikibot.Page(en,"user_talk:" + en.username()).latestRevision()
-    print("Searching known redlinks...")
+    print("Searching known Voseo redlinks...")
     for rl in rlgen:
         if talkstop and pywikibot.Page(en,"user_talk:" + en.username()).latestRevision() != talkrev:
             print("Talk page edited, stopping...")
@@ -229,8 +230,21 @@ def get_holes():
             print("Caught value error in",rl.title(),".")
             continue
         if count%25 == 0:
+            print(count,"known Voseo redlinks scanned so far,", editcount, "edits so far.")
+    print ("A total of", count, "known Voseo redlinks scanned. Searching Spanish terms known to have redlinks...")
+    for rl in badgen:
+        if talkstop and pywikibot.Page(en,"user_talk:" + en.username()).latestRevision() != talkrev:
+            print("Talk page edited, stopping...")
+            break
+        count+=1
+        try:
+            for m in is_hole(rl.title(),mood='all'):
+                fix_hole(rl.title(),mood=m)
+        except ValueError:
+            print("Caught value error in",rl.title(),".")
+            continue
+        if count%25 == 0:
             print(count,"known redlinks scanned so far,", editcount, "edits so far.")
-    print ("A total of", count, "known redlinks scanned.")
     print("Known redlinks scanned. " + str(editcount) + " edits performed. Starting full scan, starting with ar...")
     count=0
     for a in argen:
