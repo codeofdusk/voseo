@@ -120,7 +120,7 @@ def is_hole(infinitive,mood='indicative',algo='both',checkspanish=True):
             if is_hole(infinitive,mood=m,algo=algo,checkspanish=checkspanish):
                 res.append(m)
         return res
-def generate_vostext(infinitive,vosform=None,ending=None,mood='indicative',header=True,footer=True):
+def generate_vostext(infinitive,vosform=None,ending=None,mood='indicative',header=True):
     "Generates the text for a voseo definition."
     if vosform == None:
         vosform=get_regular_voseo(infinitive,mood=mood)
@@ -128,13 +128,11 @@ def generate_vostext(infinitive,vosform=None,ending=None,mood='indicative',heade
         ending=get_ending(infinitive)
     text=''
     if header:
-        text += "==Spanish==\n\n===Verb===\n{{es-verb-form}}\n"
+        text += "==Spanish==\n\n===Verb===\n{{head|es|verb form}}\n"
     text += "# {{es-verb form of|ending=" + ending + "|mood=" + mood
     if mood == 'imperative':
         text+='|sense=affirmative'
     text += "|tense=present|pers=2|voseo=yes|formal=no|number=singular|" + infinitive + "|region=Latin America}}\n"
-    if footer:
-        text += "\n[[es:" + vosform + "]]"
     return text
 def fix_hole(infinitive,vosform=None,ending=None,mood='indicative',force=False):
     "Patch a voseo hole. Takes an infinitive, and optionally the vosform, ending, and mood (\'indicative\', \'imperative\' or \'subjunctive\') otherwise we autodetect and default to \'indicative\'. We check if a hole exists before making changes, disable by passing Force=True. Returns True on success, false on error."
@@ -164,7 +162,7 @@ def fix_hole(infinitive,vosform=None,ending=None,mood='indicative',force=False):
         if sindex == None:
             for r in range(len(voslist)):
                 if "[[es:" in voslist[r]:
-                    voslist.insert(r-1,generate_vostext(infinitive=infinitive,mood=mood,vosform=vosform,footer=False))
+                    voslist.insert(r-1,generate_vostext(infinitive=infinitive,mood=mood,vosform=vosform))
                     vospage.text='\n'.join(voslist).replace('\n\n\n','\n\n')
                     vospage.save("Added Spanish section.")
                     editcount+=1
@@ -179,7 +177,7 @@ def fix_hole(infinitive,vosform=None,ending=None,mood='indicative',force=False):
             while voslist[i].startswith('#'):
                 i+=1
                 continue
-            voslist.insert(i,generate_vostext(infinitive=infinitive,mood=mood,vosform=vosform,header=False,footer=False))
+            voslist.insert(i,generate_vostext(infinitive=infinitive,mood=mood,vosform=vosform,header=False))
             vospage.text='\n'.join(voslist).replace('\n\n\n','\n\n')
             vospage.save("Added voseo.")
             editcount+=1
@@ -188,7 +186,7 @@ def fix_hole(infinitive,vosform=None,ending=None,mood='indicative',force=False):
         ending=get_ending(infinitive)
     try:
         page=pywikibot.Page(en,vosform)
-        page.text=generate_vostext(infinitive=infinitive,vosform=vosform,mood=mood,header=True,footer=True)
+        page.text=generate_vostext(infinitive=infinitive,vosform=vosform,mood=mood,header=True)
         page.save("\n")
     except:
         print("Exception caught, can't fix hole - traceback follows:",traceback.format_exc())
