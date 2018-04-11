@@ -265,8 +265,8 @@ def get_holes():
             break
         count+=1
         try:
-            for m in is_hole(a.title(),mood='all'):
-                fix_hole(a.title(),mood=m)
+            for m in is_hole(e.title(),mood='all'):
+                fix_hole(e.title(),mood=m)
         except ValueError:
             continue
         if count%100 == 0:
@@ -280,8 +280,8 @@ def get_holes():
             break
         count+=1
         try:
-            for m in is_hole(a.title(),mood='all'):
-                fix_hole(a.title(),mood=m)
+            for m in is_hole(i.title(),mood='all'):
+                fix_hole(i.title(),mood=m)
         except ValueError:
             continue
         if count%100 == 0:
